@@ -1,5 +1,6 @@
 import subprocess
 import json
+import zipfile
 import os
 from SpeedTest import SpeedTestParser
 from datetime import datetime
@@ -7,6 +8,17 @@ import pandas as pd
 import time
 import matplotlib.pyplot as plt
 from GifMaker import GifMaker
+from glob import glob
+def zip_all_images(path:str) -> None:
+   now = datetime.now()
+   current_date = f'{now.day}-{now.month}-{now.year}_{now.time()}'
+   images_lst = glob(os.path.join(path,'Output','Download-Graph','*.png'))
+
+   zippedFileName = zipfile.ZipFile(os.path.join(path,'Output','Download-Graph',f'{now.strftime("%H-%M-%S")}.zip'), 'w', zipfile.ZIP_DEFLATED)
+   for img in images_lst:
+      zippedFileName.write(img)
+   zippedFileName.close()
+   
 def run_speed_test() -> None:
    total_runs = 60
    seconds_per_day = 60*60  # Total seconds in a day
@@ -32,11 +44,10 @@ def run_speed_test() -> None:
       plt.savefig(os.path.join(os.getcwd(),"Output",'Download-Graph',f"graph-{datetime.now().strftime('%H-%M-%S')}.png"))
       
       time.sleep(interval)
-# print(sp.get_download_speed(),'Mb')
-# print(sp.get_upload_speed(),'Mb')
+
 
 if __name__ == '__main__':
    run_speed_test()
    g = GifMaker(os.path.join(os.getcwd(),'Output','Download-Graph'))
    g.generate_gif_from_images(os.path.join(os.getcwd(),'Output','gif','gif.gif'))
-   
+   zip_all_images(os.getcwd())
