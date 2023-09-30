@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from GifMaker import GifMaker
 def run_speed_test() -> None:
    total_runs = 60
-   seconds_per_day = 60  # Total seconds in a day
+   seconds_per_day = 60*60  # Total seconds in a day
    interval = seconds_per_day / total_runs
    
    download_lst = []
@@ -37,6 +37,6 @@ def run_speed_test() -> None:
 
 if __name__ == '__main__':
    run_speed_test()
-   g = GifMaker(r'C:\Users\user\GithubRepos\SpeedTest\Output\Download-Graph')
-   g.generate_gif_from_images(r'C:\Users\user\GithubRepos\SpeedTest\Output\gif\gif.gif')
+   g = GifMaker(os.path.join(os.getcwd(),'Output','Download-Graph'))
+   g.generate_gif_from_images(os.path.join(os.getcwd(),'Output','gif','gif.gif'))
    
